@@ -26,7 +26,7 @@ namespace SyZero.Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOcelot()//Ocelot如何处理
-                .AddConsul()//支持Consul
+                .AddConsul<ConsulServiceBuilder>()//支持Consul
                 .AddCacheManager(x =>
                 {
                     x.WithDictionaryHandle();//默认字典存储
