@@ -50,6 +50,13 @@ namespace SyZero.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyMethod()
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
             app.UseRouting();
             app.UseSwagger(); 
 
