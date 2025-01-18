@@ -72,6 +72,7 @@ namespace SyZero.Gateway
             {
                 opt.PathToSwaggerGenerator = "/swagger/docs";
             });
+            app.UseWebSockets();
             app.UseOcelot().Wait();
         }
     }
