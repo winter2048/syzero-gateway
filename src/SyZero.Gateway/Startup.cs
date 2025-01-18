@@ -31,7 +31,10 @@ namespace SyZero.Gateway
                 {
                     x.WithDictionaryHandle();//Ä¬ÈÏ×Öµä´æ´¢
                 })
-                .AddPolly();
+                .AddPolly()
+                .AddConfigStoredInConsul();
+
+            services.AddSignalR();
 
             services.AddSwaggerForOcelot(Configuration);
 

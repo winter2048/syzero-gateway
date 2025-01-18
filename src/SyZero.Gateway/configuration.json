@@ -48,6 +48,14 @@
         "Type": "RoundRobin"
       },
       "SwaggerKey": "SyZero.Blog"
+    },
+    {
+      "UpstreamPathTemplate": "/{url}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "UseServiceDiscovery": true,
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "ws",
+      "ServiceName": "SyZero.AI"
     }
   ],
   "SwaggerEndPoints": [
