@@ -26,12 +26,15 @@ namespace SyZero.Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOcelot()//Ocelot如何处理
-                .AddConsul()//支持Consul
+                .AddConsul<ConsulServiceBuilder>()//支持Consul
                 .AddCacheManager(x =>
                 {
                     x.WithDictionaryHandle();//默认字典存储
                 })
-                .AddPolly();
+                .AddPolly()
+                .AddConfigStoredInConsul();
+
+            services.AddSignalR();
 
             services.AddSwaggerForOcelot(Configuration);
 
@@ -50,6 +53,13 @@ namespace SyZero.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyMethod()
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
             app.UseRouting();
             app.UseSwagger(); 
 
@@ -62,6 +72,7 @@ namespace SyZero.Gateway
             {
                 opt.PathToSwaggerGenerator = "/swagger/docs";
             });
+            app.UseWebSockets();
             app.UseOcelot().Wait();
         }
     }

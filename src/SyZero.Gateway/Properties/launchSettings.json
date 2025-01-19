@@ -16,12 +16,12 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SyZeroBlog.Web": {
+    "SyZero.Gateway": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Dev"
       },
       "applicationUrl": "http://localhost:5000"
     },
