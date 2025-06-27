@@ -9,6 +9,10 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
 using Ocelot.Provider.Polly;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace SyZero.Gateway
 {
@@ -25,6 +29,24 @@ namespace SyZero.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOpenTelemetry()
+            .WithTracing(b => b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(AppConfig.ServerOptions.Name)).AddSource("*")
+                .AddAspNetCoreInstrumentation(opt =>
+                {
+                    opt.Filter = context =>
+                    {
+                        return context.Request.Path.ToString().StartsWith("/api/");
+                    };
+                })
+                .AddHttpClientInstrumentation().AddConsoleExporter()
+                .AddSource("Microsoft.AspNetCore.Hosting"))
+            .WithMetrics(b => b.AddMeter("*")
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddPrometheusExporter())
+            .WithLogging()
+            .UseOtlpExporter(OpenTelemetry.Exporter.OtlpExportProtocol.Grpc, new System.Uri("http://aspire-dashboard:18889"));
+
             services.AddOcelot()//Ocelot如何处理
                 .AddConsul<ConsulServiceBuilder>()//支持Consul
                 .AddCacheManager(x =>
