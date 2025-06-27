@@ -34,6 +34,9 @@ namespace SyZero.Gateway
                 logging.IncludeScopes = true;
             }).AddSyZeroLog4Net();
 
+            //使用OpenTelemetry遥测
+            builder.Services.AddSyZeroOpenTelemetry();
+
             builder.Services.AddOcelot() //Ocelot如何处理
              .AddConsul<ConsulServiceBuilder>() //支持Consul
              .AddCacheManager(x =>
